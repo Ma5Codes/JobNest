@@ -1,19 +1,22 @@
-import './index.css';
-import './App.css';
-import { ThemeProvider } from "@/components/theme-provider";
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import AppLayout from './layout/appLayout'; // Correct import
-import  LandingPage  from './pages/landing';
-import  Onboarding  from './pages/onboarding';
-import JobListing from './pages/job-listing';
-import SavedJobs from './pages/saved-job';
-import PostJob from './pages/post-job';
-import JobPage from './pages/job';
-import MyJobs from './pages/my-jobs';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+import AppLayout from "./layout/appLayout";
+import ProtectedRoute from "./components/protected-route";
+import { ThemeProvider } from "./components/theme-provider";
+
+import LandingPage from "./pages/landing";
+import Onboarding from "./pages/onboarding";
+import PostJob from "./pages/post-job";
+import JobListing from "./pages/job-listing";
+import MyJobs from "./pages/my-jobs";
+import SavedJobs from "./pages/saved-job";
+import JobPage from "./pages/job";
+
+import "./App.css";
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout />, // Correct usage
+    element: <AppLayout />,
     children: [
       {
         path: "/",
@@ -21,30 +24,54 @@ const router = createBrowserRouter([
       },
       {
         path: "/onboarding",
-        element: <Onboarding />,
+        element: (
+          <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/jobs",
-        element: <JobListing />,
-      },
-      {
-        path: "/job/:id",
-        element: <JobPage />,
+        element: (
+          <ProtectedRoute>
+            <JobListing />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/post-job",
-        element: <PostJob />,
-      },
-      {
-        path: "/saved-job",
-        element: <SavedJobs />,
+        element: (
+          <ProtectedRoute>
+            <PostJob />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/my-jobs",
-        element: <MyJobs />,
-      }
-    ]
-  }
+        element: (
+          <ProtectedRoute>
+            <MyJobs />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/saved-jobs",
+        element: (
+          <ProtectedRoute>
+            <SavedJobs />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/job/:id",
+        element: (
+          <ProtectedRoute>
+            <JobPage />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 function App() {
@@ -53,7 +80,6 @@ function App() {
       <RouterProvider router={router} />
     </ThemeProvider>
   );
- 
 }
 
 export default App;
